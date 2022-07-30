@@ -37,7 +37,7 @@ const postData = async (url = '', data = {}) => {
 
 /* Function to GET Project Data from server */
 const getAll = async () => {
-    const response = await fetch('/all');
+    const response = await fetch('http://localhost:8081/all');
 
     try {
         const newData = await response.json();
@@ -61,7 +61,7 @@ async function submitWeatherQuery() {
             let data = { temp: res.main.temp, date: weatherTime.toDateString(), content: feelings }
 
             // (Chained) Updating client with retrieved weather
-            postData('/addData', data).then(() => {
+            postData('http://localhost:8081/addData', data).then(() => {
                 getAll().then((res) => {
                     document.getElementById('date').innerHTML = res.date;
                     document.getElementById('temp').innerHTML = Math.round(res.temp) + "°F";

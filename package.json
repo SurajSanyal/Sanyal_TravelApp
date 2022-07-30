@@ -1,4 +1,10 @@
 {
+    "scripts": {
+        "test": "jest",
+        "start": "node src/server/server.js",
+        "build": "webpack --config webpack.prod.js",
+        "dev": "webpack serve --config webpack.dev.js --open --static-public-path src/client"
+    },
     "dependencies": {
         "body-parser": "^1.20.0",
         "cors": "^2.8.5",

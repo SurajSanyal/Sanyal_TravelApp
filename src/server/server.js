@@ -7,6 +7,11 @@ const express = require('express');
 // Start up an instance of app
 const app = express();
 
+// Setting up API Keys from dotenv
+const dotenv = require('dotenv');
+const GN_API_KEY = process.env.GN_API_KEY;
+const GN_BASE_URL = "http://api.geonames.org/search?q=london&maxRows=10&username=sanyal_travelapp";
+
 /* Middleware */
 // Configuring express to use body-parser as middle-ware.
 const bodyParser = require('body-parser');
@@ -21,7 +26,7 @@ app.use(cors());
 app.use(express.static('dist'));
 
 // Setup Server
-const port = 3000;
+const port = 8081;
 app.listen(port, () => {
     console.log(`App listening on localhost:${port}`);
 })
