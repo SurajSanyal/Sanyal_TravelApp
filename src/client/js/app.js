@@ -71,4 +71,22 @@ async function submitWeatherQuery() {
         });
 }
 
-export { submitWeatherQuery }
+/* Function called by event listener */
+async function submitCityQuery() {
+    const data = { city: document.getElementById('city').value }
+
+    // Getting city data from GeoNames
+    postData('http://localhost:8081/geonamesData', data).then((res) => {
+        console.log(res.geonames[0]);
+        /* Things we care about:
+            - lat
+            - lng
+            - name
+            - country (countryCode? countryId?)
+        */
+
+        // @todo: get city weather data
+    })
+};
+
+export { submitWeatherQuery, submitCityQuery }
