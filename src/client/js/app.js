@@ -65,6 +65,25 @@ async function submitCityQuery() {
         }
 
         const cityData = res.geonames[0];
+
+        // Get Picture Data from Pixabay
+        const picQueryData = {
+            searchTerm: cityData.toponymName
+        }
+
+        postData('http://localhost:8081/pixabayData', picQueryData).then((res) => {
+            let picUrl;
+            // res has hits [array], total, and totalHits.
+
+            if (!res.totalHits) {
+                picUrl = "https://placeimg.com/640/480/nature";
+            } else {
+                picUrl = res.hits[0].pageURL;
+            }
+
+            console.log(`Picture URL: ${picUrl}`);
+        })
+
         const weatherQueryData = {
             lat: cityData.lat,
             lon: cityData.lng,

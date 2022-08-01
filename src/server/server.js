@@ -15,6 +15,8 @@ const GN_BASE_URL = "http://api.geoNames.org/searchJSON?";
 const WB_API_KEY = process.env.WB_API_KEY;
 const WB_BASE_URL = "http://api.weatherbit.io/v2.0/current?";
 const WBHIST_BASE_URL = "https://api.weatherbit.io/v2.0/history/daily?"
+const PB_API_KEY = process.env.PB_API_KEY;
+const PB_BASE_URL = "https://pixabay.com/api/?";
 
 /* Middleware */
 // Configuring express to use body-parser as middle-ware.
@@ -78,6 +80,26 @@ app.post("/geoNamesData", async (req, res) => {
     try {
         const response = await cityData.json();
 
+        res.send(response);
+    } catch (error) {
+        console.log("Error: ", error);
+    }
+})
+
+/* Function to query Pixabay w/ POST */
+app.post("/pixabayData", async (req, res) => {
+    const searchTerm = req.body.searchTerm;
+    /* console.log(
+        "url = ",
+        PB_BASE_URL + "q=" + searchTerm + "&image_type=photo&category=travel&safesearch=true&page=1&per_page=3&key=" + PB_API_KEY
+    ); */
+    const url = PB_BASE_URL + "q=" + searchTerm + "&image_type=photo&category=travel&safesearch=true&page=1&per_page=3&key=" + PB_API_KEY;
+
+    // API request to Pixabay
+    const picData = await fetch(url);
+
+    try {
+        const response = await picData.json();
         res.send(response);
     } catch (error) {
         console.log("Error: ", error);
