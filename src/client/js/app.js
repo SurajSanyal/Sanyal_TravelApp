@@ -66,23 +66,9 @@ async function submitCityQuery() {
 
         const cityData = res.geonames[0];
 
-        // Get Picture Data from Pixabay
         const picQueryData = {
             searchTerm: cityData.toponymName
         }
-
-        postData('http://localhost:8081/pixabayData', picQueryData).then((res) => {
-            let picUrl;
-            // res has hits [array], total, and totalHits.
-
-            if (!res.totalHits) {
-                picUrl = "https://placeimg.com/640/480/nature";
-            } else {
-                picUrl = res.hits[0].pageURL;
-            }
-
-            console.log(`Picture URL: ${picUrl}`);
-        })
 
         const weatherQueryData = {
             lat: cityData.lat,
@@ -90,11 +76,26 @@ async function submitCityQuery() {
             date: document.getElementById('date').value,
         }
 
-        // Get city weather data from Weatherbit
-        postData('http://localhost:8081/weatherBitData', weatherQueryData).then((res) => {
-            const weatherInfo = res.weatherData.data[0];
+        // from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all
+        Promise.all([postData('http://localhost:8081/pixabayData', picQueryData),
+        postData('http://localhost:8081/weatherBitData', weatherQueryData)]).then((values) => {
+            const picRes = values[0];
+            const weatherRes = values[1];
 
-            if (res.isCurrent) {
+            // Process Pixabay result
+            let picUrl;
+            if (!picRes.totalHits) {
+                picUrl = "https://placeimg.com/640/480/nature";
+            } else {
+                picUrl = picRes.hits[0].pageURL;
+            }
+
+            console.log(`Picture URL: ${picUrl}`);
+
+            // Process weather result
+            const weatherInfo = weatherRes.weatherData.data[0];
+
+            if (weatherRes.isCurrent) {
                 console.log(`Current Weather: ${weatherInfo.weather.description}`)
                 console.log(`Current Temp: ${weatherInfo.temp}F`)
                 console.log(`Feels Like: ${weatherInfo.app_temp}F`)
@@ -103,8 +104,7 @@ async function submitCityQuery() {
                 console.log(`Low: ${weatherInfo.min_temp}F`)
             }
 
-        })
-
+        });
 
         // Update projectData (w/ '/addData' endpoint) & UI
         /* 
@@ -117,9 +117,6 @@ async function submitCityQuery() {
                 })
             });
         */
-
-        // @todo: refactor with Promise.all for weather vs pixabay
-        // https://stackoverflow.com/a/59664248
     })
 };
 
