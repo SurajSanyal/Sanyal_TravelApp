@@ -1,5 +1,7 @@
 // Setup empty JS object to act as endpoint for all routes
-projectData = {};
+projectData = {
+    trips: []
+};
 
 // Require Express to run server and routes
 const express = require('express');
@@ -50,15 +52,35 @@ app.get('/all', (req, res) => {
 // Post Route
 app.post('/addData', (req, res) => {
     try {
-        // body should have temp, date, & user response (content)
-        if (!req.body.temp) throw new Error('POST request must include temp!');
-        if (!req.body.date) throw new Error('POST request must include date!');
-        if (!req.body.content) throw new Error('POST request must include content!');
+        let updateData = {}
+        const tripData = req.body;
 
-        projectData.temp = req.body.temp;
-        projectData.date = req.body.date;
-        projectData.content = req.body.content;
+        // All trips should have URL & isTripSoon
+        if (!tripData.url) throw new Error('POST request must include picture URL!')
+        updateData.url = tripData.url;
 
+        if (!tripData.isTripSoon) throw new Error('POST request must include isTripSoon!')
+        updateData.isTripSoon = tripData.isTripSoon;
+
+        // Check temps depending on current/future trip
+        if (tripData.isTripSoon) {
+            // Recent trips should have current temp & "feels like" temp
+            if (!tripData.app_temp) throw new Error('POST request must include app temp!')
+            if (!tripData.temp) throw new Error('POST request must include current temp!')
+
+            updateData.app_temp = tripData.app_temp;
+            updateData.temp = tripData.temp;
+        }
+        else {
+            // Future trips should have high & low temps
+            if (!tripData.max_temp) throw new Error('POST request must include max temp!')
+            if (!tripData.min_temp) throw new Error('POST request must include min temp!')
+
+            updateData.max_temp = tripData.max_temp;
+            updateData.min_temp = tripData.min_temp;
+        }
+
+        projectData.trips.push(updateData);
         res.send(projectData);
     } catch (e) {
         console.log(e);

@@ -35,29 +35,25 @@ const getAll = async () => {
     }
 }
 
-/* Function called by event listener */
-async function submitWeatherQuery() {
-    // Determine 
-    let zip = document.getElementById('zip').value;
-    let zipString = "zip=" + zip;
-
-    let feelings = document.getElementById('feelings').value;
-
-    // Calling OpenWeatherMap to retrieve weather for zip code
-    // @todo: replace with call to server
-    getWeather(BASE_URL, zipString, API_KEY)
-        .then((res) => {
-            let weatherTime = new Date(res.dt * 1000);
-            let data = { temp: res.main.temp, date: weatherTime.toDateString(), content: feelings }
-        });
+// @todo: implement UI update
+async function updateApp(data) {
+    postData('http://localhost:8081/addData', data).then(() => {
+        getAll().then((res) => {
+            console.log(res)
+            /*  document.getElementById('date').innerHTML = res.date;
+             document.getElementById('temp').innerHTML = Math.round(res.temp) + "°F";
+             document.getElementById('content').innerHTML = res.content; */
+        })
+    });
 }
 
 /* Function called by event listener */
 async function submitCityQuery() {
-    const data = { city: document.getElementById('city').value }
+    let data = {};
+    const cityNameObj = { city: document.getElementById('city').value }
 
     // Getting city data from GeoNames
-    postData('http://localhost:8081/geoNamesData', data).then((res) => {
+    postData('http://localhost:8081/geoNamesData', cityNameObj).then((res) => {
         // console.log(res.geonames[0]);
         // Check for returned city
         if (!res.totalResultsCount) {
@@ -91,33 +87,35 @@ async function submitCityQuery() {
             }
 
             console.log(`Picture URL: ${picUrl}`);
+            data.url = picUrl;
 
             // Process weather result
             const weatherInfo = weatherRes.weatherData.data[0];
 
+            data.isTripSoon = weatherRes.isCurrent;
             if (weatherRes.isCurrent) {
                 console.log(`Current Weather: ${weatherInfo.weather.description}`)
                 console.log(`Current Temp: ${weatherInfo.temp}F`)
                 console.log(`Feels Like: ${weatherInfo.app_temp}F`)
+
+                data.weather = weatherInfo.weather.description;
+                data.temp = weatherInfo.temp;
+                data.app_temp = weatherInfo.app_temp;
             } else {
                 console.log(`High: ${weatherInfo.max_temp}F`)
                 console.log(`Low: ${weatherInfo.min_temp}F`)
+
+                data.max_temp = weatherInfo.max_temp;
+                data.min_temp = weatherInfo.min_temp;
             }
 
+
+            // Update projectData (w/ '/addData' endpoint) & UI
+            console.log(data);
+            updateApp(data);
         });
 
-        // Update projectData (w/ '/addData' endpoint) & UI
-        /* 
-        // (Chained) Updating client with retrieved weather
-            postData('http://localhost:8081/addData', data).then(() => {
-                getAll().then((res) => {
-                    document.getElementById('date').innerHTML = res.date;
-                    document.getElementById('temp').innerHTML = Math.round(res.temp) + "°F";
-                    document.getElementById('content').innerHTML = res.content;
-                })
-            });
-        */
     })
 };
 
-export { submitWeatherQuery, submitCityQuery }
+export { submitCityQuery }
