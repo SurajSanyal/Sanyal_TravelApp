@@ -4,33 +4,42 @@
     <meta charset="UTF-8" />
     <title>Suraj's Travel App</title>
     <link
-      href="https://fonts.googleapis.com/css?family=Oswald:400,600,700|Ranga:400,700&display=swap"
+      href="https://fonts.googleapis.com/css?family=Source+Serif+Pro"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Source+Sans+Pro"
       rel="stylesheet"
     />
   </head>
   <body>
     <div id="app">
-      <div class="holder headline">Suraj's Travel App</div>
-      <div class="holder city">
-        <label for="city">Enter City here</label>
-        <input type="text" id="city" placeholder="enter City here" />
-      </div>
+      <header>
+        <div class="holder headline">Suraj's Travel App</div>
+      </header>
 
-      <div class="holder date">
-        <label for="date">Enter Date here</label>
-        <input type="date" id="date" placeholder="enter Date here" />
-      </div>
-
-      <button id="generate" type="submit">Generate</button>
-      <div class="holder entry">
-        <div class="title">Most Recent Entry</div>
-
-        <div id="entryHolder">
-          <div id="date"></div>
-          <div id="temp"></div>
-          <div id="content"></div>
+      <main>
+        <div class="holder city">
+          <label for="city">Enter City here</label>
+          <input type="text" id="city" placeholder="Enter City here" />
         </div>
-      </div>
+
+        <div class="holder date">
+          <label for="date">Start Date</label>
+          <input type="date" id="start" />
+        </div>
+
+        <div class="holder date">
+          <label for="date">End Date</label>
+          <input type="date" id="end" />
+        </div>
+
+        <div id="error-message"></div>
+
+        <button id="generate" type="submit">Generate</button>
+
+        <div id="cards"></div>
+      </main>
     </div>
 
     <!-- <script>

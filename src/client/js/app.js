@@ -35,14 +35,25 @@ const getAll = async () => {
     }
 }
 
-// @todo: implement UI update
 async function updateApp(data) {
     postData('http://localhost:8081/addData', data).then(() => {
         getAll().then((res) => {
             console.log(res)
-            /*  document.getElementById('date').innerHTML = res.date;
-             document.getElementById('temp').innerHTML = Math.round(res.temp) + "°F";
-             document.getElementById('content').innerHTML = res.content; */
+            const tripData = res.trips[res.trips.length - 1];
+            let cardHTML;
+
+            // Update UI
+            const card =
+                `<div class="card">
+                <img class="trip-image" src=${tripData.url}>
+                <div class="trip-info">
+                    <div class="city-desc">Your Trip to: ${tripData.city}</div>
+                    <div class="date-desc">Departing: ${tripData.start}</div>
+                    <div class="date-desc">Duration: ${tripData.duration.substring(0, tripData.duration.length - 9)}</div>
+                </div>
+            </div>`;
+
+            document.getElementById("cards").insertAdjacentHTML('beforeend', card)
         })
     });
 }
@@ -50,7 +61,14 @@ async function updateApp(data) {
 /* Function called by event listener */
 async function submitCityQuery() {
     let data = {};
+    data.start = document.getElementById('start').value;
+    data.end = document.getElementById('end').value;
+
     const cityNameObj = { city: document.getElementById('city').value }
+    if (cityNameObj.city == '') {
+        document.getElementById('error-message').innerHTML = "Please input a city!";
+        throw "No City input -- check for invalid 'city' input";
+    }
 
     // Getting city data from GeoNames
     postData('http://localhost:8081/geoNamesData', cityNameObj).then((res) => {
@@ -61,6 +79,7 @@ async function submitCityQuery() {
         }
 
         const cityData = res.geonames[0];
+        data.city = cityData.toponymName;
 
         const picQueryData = {
             searchTerm: cityData.toponymName
@@ -69,7 +88,7 @@ async function submitCityQuery() {
         const weatherQueryData = {
             lat: cityData.lat,
             lon: cityData.lng,
-            date: document.getElementById('date').value,
+            date: document.getElementById('start').value,
         }
 
         // from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all
@@ -83,7 +102,7 @@ async function submitCityQuery() {
             if (!picRes.totalHits) {
                 picUrl = "https://placeimg.com/640/480/nature";
             } else {
-                picUrl = picRes.hits[0].pageURL;
+                picUrl = picRes.hits[0].webformatURL;
             }
 
             console.log(`Picture URL: ${picUrl}`);

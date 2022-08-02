@@ -55,21 +55,38 @@ app.post('/addData', (req, res) => {
         let updateData = {}
         const tripData = req.body;
 
-        // All trips should have URL & isTripSoon
+        // All trips should have city, dates, URL & isTripSoon
         if (!tripData.url) throw new Error('POST request must include picture URL!')
         updateData.url = tripData.url;
 
-        if (!tripData.isTripSoon) throw new Error('POST request must include isTripSoon!')
+        if (!tripData.start) throw new Error('POST request must include start date!')
+        updateData.start = tripData.start;
+
+        if (!tripData.end) throw new Error('POST request must include end date!')
+        updateData.end = tripData.end;
+
+        const startDate = DateTime.fromISO(updateData.start);
+        const endDate = DateTime.fromISO(updateData.end);
+
+        const durationObj = endDate.diff(startDate, ["years", "months", "days", "hours"]).plus({ days: 1 });
+        updateData.duration = durationObj.toHuman();
+
+        if (!tripData.city) throw new Error('POST request must include picture city!')
+        updateData.city = tripData.city;
+
+        if (tripData.isTripSoon == undefined) throw new Error('POST request must include isTripSoon!')
         updateData.isTripSoon = tripData.isTripSoon;
 
         // Check temps depending on current/future trip
         if (tripData.isTripSoon) {
-            // Recent trips should have current temp & "feels like" temp
+            // Recent trips should have weather, current temp & "feels like" temp
             if (!tripData.app_temp) throw new Error('POST request must include app temp!')
             if (!tripData.temp) throw new Error('POST request must include current temp!')
+            if (!tripData.weather) throw new Error('POST request must include current weather description!')
 
             updateData.app_temp = tripData.app_temp;
             updateData.temp = tripData.temp;
+            updateData.weather = tripData.weather;
         }
         else {
             // Future trips should have high & low temps

@@ -1,38 +1,36 @@
+// primary shades 
+$primary-dark: #545871;
+$primary-base: #9497A7;
+$primary-light: #DADBE7;
+$primary-lighter: #F0F1F8;
+
+// accent shades
+$accent-dark: #C37E7B;
+$accent-light: #F1CFCD;
+
+// secondary shades
+$secondary-dark: #E9DBDA;
+$secondary-light: #FAECEB;
+
+
 body{
-    background: #fffff8;
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    background: $secondary-dark;
+    font-family: -apple-system, BlinkMacSystemFont, serif;
 }
 
 #app {
     display: grid;
-    grid-auto-rows: minmax(150px, auto);
-    /* grid-template-columns:  */
-    height:100vh;
     justify-items: center;
-    background: #f89e55;
-    color: #0f0059;
-    justify-content: center;
     grid-gap: 1em;
     font-size: 20px;
-    font-family: 'Oswald', sans-serif;
-}
-
-.entry {
-    background: rgba(107, 59, 73, 0.4);
-    min-height: 250px;
-    width: 100%;
+    font-family: 'Source Serif Pro', serif;
 }
 
 .headline {
     align-items: center;
     justify-content: center;
     font-size: xx-large;
-}
-
-.title {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    font-weight: bold;
 }
 
 /*  Basic Styling To Override Default For Basic HTML Elements */
@@ -46,34 +44,59 @@ input{
     display:block;
     height: 60px;
     width: 320px;
-    background:#22b2da;
-    color: #f0d43a;
+    background: $primary-lighter;
+    color: $accent-dark;
     font-size: 20px;
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Source Sans Pro', sans-serif;
     border: none;
 }
 
 button{
     width: 400px;
     height: 100px;
-    background: #3b4a6b;
-    color: #f0d43a;
+    background: $primary-dark;
+    color: $primary-lighter;
     font-size: 26px;
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Source Sans Pro', sans-serif;
     border: none;
     box-shadow: 2px 4px 5px #444;
     margin-bottom: 20px;
 }
+
+.holder {
+    align-self: center;
+}
+
+button:disabled {
+    background: gray;
+}
+
 h1{
     font-size: 36px;
 }
 
-textarea{
-    background:#22b2da;
-    color: #f0d43a;
-    font-size: 20px;
-    font-family: 'Oswald', sans-serif;
+// Card CSS from https://getflywheel.com/layout/card-layout-css-grid-layout-how-to/
+#cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-auto-rows: auto;
+    grid-gap: 1rem;
 }
+
+.card {
+    background-color: $primary-lighter;
+    border: 2px solid $primary-dark;
+    border-radius: 20px;
+    padding: .5rem;
+}
+
+.trip-image {
+    border: 1px solid $primary-light;
+    border-radius: 10%;
+    padding: 3px;
+    width: 150px;
+}
+
 /* Reset style for HTML element on active to have no border*/
 input:focus,
 select:focus,
@@ -83,19 +106,19 @@ button:focus {
 }
 /* Style for Placeholder Text*/
 ::placeholder { /* Firefox, Chrome, Opera */ 
-    color: #f0d43a; 
-    font-family: 'Oswald', sans-serif;
+    color: $accent-light; 
+    font-family: 'Source Sans Pro', sans-serif;
 
 } 
   
 :-ms-input-placeholder { /* Internet Explorer 10-11 */ 
-    color: #f0d43a; 
-    font-family: 'Oswald', sans-serif;
+    color: $accent-light; 
+    font-family: 'Source Sans Pro', sans-serif;
 
 } 
   
 ::-ms-input-placeholder { /* Microsoft Edge */ 
-    color: #f0d43a; 
-    font-family: 'Oswald', sans-serif;
+    color: $accent-light; 
+    font-family: 'Source Sans Pro', sans-serif;
 
 } 
