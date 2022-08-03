@@ -33,7 +33,6 @@ const getAll = async () => {
 async function updateApp(data) {
     postData('http://localhost:8081/addData', data).then(() => {
         getAll().then((res) => {
-            // console.log(res)
             const tripData = res.trips[res.trips.length - 1];
 
             // Update UI
@@ -81,7 +80,6 @@ async function submitCityQuery() {
 
     // Getting city data from GeoNames
     postData('http://localhost:8081/geoNamesData', cityNameObj).then((res) => {
-        // console.log(res.geonames[0]);
         // Check for returned city
         if (!res.totalResultsCount) {
             throw "No City result found -- check for invalid 'city' input";
@@ -114,7 +112,6 @@ async function submitCityQuery() {
                 picUrl = picRes.hits[0].webformatURL;
             }
 
-            // console.log(`Picture URL: ${picUrl}`);
             data.url = picUrl;
 
             // Process weather result
@@ -122,24 +119,16 @@ async function submitCityQuery() {
 
             data.isTripSoon = weatherRes.isCurrent;
             if (weatherRes.isCurrent) {
-                /* console.log(`Current Weather: ${weatherInfo.weather.description}`)
-                console.log(`Current Temp: ${weatherInfo.temp}F`)
-                console.log(`Feels Like: ${weatherInfo.app_temp}F`) */
-
                 data.weather = weatherInfo.weather.description;
                 data.temp = weatherInfo.temp;
                 data.app_temp = weatherInfo.app_temp;
             } else {
-                /* console.log(`High: ${weatherInfo.max_temp}F`)
-                console.log(`Low: ${weatherInfo.min_temp}F`) */
-
                 data.max_temp = weatherInfo.max_temp;
                 data.min_temp = weatherInfo.min_temp;
             }
 
 
             // Update projectData (w/ '/addData' endpoint) & UI
-            // console.log(data);
             updateApp(data);
         });
 

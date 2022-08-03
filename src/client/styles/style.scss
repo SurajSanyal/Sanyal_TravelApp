@@ -134,7 +134,7 @@ button:disabled {
     background: gray;
 }
 
-// Card CSS from https://getflywheel.com/layout/card-layout-css-grid-layout-how-to/
+// Card CSS adapted from https://getflywheel.com/layout/card-layout-css-grid-layout-how-to/
 #cards {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -165,14 +165,14 @@ button:disabled {
     flex-grow: 1;
 }
 
-/* Reset style for HTML element on active to have no border*/
+/* Reset style for HTML element on active to have no border */
 input:focus,
 select:focus,
 textarea:focus,
 button:focus {
     outline: none;
 }
-/* Style for Placeholder Text*/
+/* Style for Placeholder Text */
 ::placeholder { /* Firefox, Chrome, Opera */ 
     color: $accent-light; 
     font-family: 'Source Sans Pro', sans-serif;

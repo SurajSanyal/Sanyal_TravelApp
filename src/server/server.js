@@ -115,10 +115,6 @@ app.post('/addData', (req, res) => {
 /* Function to query Geonames w/ POST */
 app.post("/geoNamesData", async (req, res) => {
     const city = req.body.city;
-    /* console.log(
-        "url = ",
-        GN_BASE_URL + "q=" + city + "&maxRows=1&username=" + GN_API_KEY
-    ); */
     const url = GN_BASE_URL + "q=" + city + "&maxRows=1&username=" + GN_API_KEY;
 
     // API request to geoNames
@@ -136,10 +132,6 @@ app.post("/geoNamesData", async (req, res) => {
 /* Function to query Pixabay w/ POST */
 app.post("/pixabayData", async (req, res) => {
     const searchTerm = req.body.searchTerm;
-    /* console.log(
-        "url = ",
-        PB_BASE_URL + "q=" + searchTerm + "&image_type=photo&category=travel&safesearch=true&page=1&per_page=3&key=" + PB_API_KEY
-    ); */
     const url = PB_BASE_URL + "q=" + searchTerm + "&image_type=photo&category=travel&safesearch=true&page=1&per_page=3&key=" + PB_API_KEY;
 
     // API request to Pixabay
@@ -167,10 +159,6 @@ app.post("/weatherBitData", async (req, res) => {
     // <=1 wk: return current weather
     if (timeDif.weeks <= 1) {
         // Endpoint construction
-        /* console.log(
-            "url = ",
-            WB_BASE_URL + "lat=" + lat + "&lon=" + lon + "&key=" + WB_API_KEY + "&units=I"
-        ); */
         const url = WB_BASE_URL + "lat=" + lat + "&lon=" + lon + "&key=" + WB_API_KEY + "&units=I";
 
         // API request to WeatherBit
@@ -182,10 +170,6 @@ app.post("/weatherBitData", async (req, res) => {
         const endDate = tripDate.minus({ years: 1 }).plus({ days: 1 }).toISODate();
 
         // Endpoint construction
-        /* console.log(
-            "url = ",
-            WBHIST_BASE_URL + "lat=" + lat + "&lon=" + lon + "&start_date=" + startDate + "&end_date=" + endDate + "&key=" + WB_API_KEY + "&units=I"
-        ); */
         const url = WBHIST_BASE_URL + "lat=" + lat + "&lon=" + lon + "&start_date=" + startDate + "&end_date=" + endDate + "&key=" + WB_API_KEY + "&units=I";
 
         // API request to WeatherBit
