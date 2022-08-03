@@ -1,12 +1,10 @@
 // Setup empty JS object to act as endpoint for all routes
-projectData = {
+let projectData = {
     trips: []
 };
 
 // Require Express to run server and routes
 const express = require('express');
-
-// Start up an instance of app
 const app = express();
 
 // Setting up API Keys from dotenv
@@ -38,15 +36,9 @@ const { DateTime } = require("luxon");
 // Initialize the main project folder (built into 'dist' folder)
 app.use(express.static('dist'));
 
-// Setup Server
-const port = 8081;
-app.listen(port, () => {
-    console.log(`App listening on localhost:${port}`);
-})
-
 // Initialize '/all' GET route with a callback function
 app.get('/all', (req, res) => {
-    res.send(projectData);
+    res.status(200).send(projectData);
 })
 
 // Post Route
@@ -65,11 +57,27 @@ app.post('/addData', (req, res) => {
         if (!tripData.end) throw new Error('POST request must include end date!')
         updateData.end = tripData.end;
 
+        // Construct duration string
         const startDate = DateTime.fromISO(updateData.start);
         const endDate = DateTime.fromISO(updateData.end);
 
-        const durationObj = endDate.diff(startDate, ["years", "months", "days", "hours"]).plus({ days: 1 });
-        updateData.duration = durationObj.toHuman();
+        const durationObj = endDate.diff(startDate, ["years", "months", "days"]).plus({ days: 1 });
+
+        let durationString = '';
+        if (durationObj.values.years) {
+            durationString += `${durationObj.values.years} year`;
+            if (durationObj.values.years > 1) durationString += 's'
+        }
+        if (durationObj.values.months) {
+            durationString += ` ${durationObj.values.months} month`;
+            if (durationObj.values.months > 1) durationString += 's'
+        }
+        if (durationObj.values.days) {
+            durationString += ` ${durationObj.values.days} day`;
+            if (durationObj.values.days > 1) durationString += 's'
+        }
+
+        updateData.duration = durationString;
 
         if (!tripData.city) throw new Error('POST request must include picture city!')
         updateData.city = tripData.city;
@@ -194,3 +202,5 @@ app.post("/weatherBitData", async (req, res) => {
         console.log("Error: ", error);
     }
 })
+
+module.exports = app;

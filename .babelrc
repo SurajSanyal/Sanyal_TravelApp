@@ -1,0 +1,6 @@
+{
+    "presets": [
+        // needed to use async/await in formHandler.js
+        ["@babel/preset-env", {"targets": { "node": "current" }}]
+    ]
+}

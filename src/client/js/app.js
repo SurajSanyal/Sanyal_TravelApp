@@ -1,8 +1,3 @@
-/* Global Variables */
-// Personal API Key for OpenWeatherMap API
-const API_KEY = '&appid=ed1efc82a2abe2917dc76cf82ed12e93&units=imperial';
-const BASE_URL = 'http://api.openweathermap.org/data/2.5/weather?';
-
 /* Function to POST data */
 const postData = async (url = '', data = {}) => {
     const response = await fetch(url, {
@@ -38,22 +33,36 @@ const getAll = async () => {
 async function updateApp(data) {
     postData('http://localhost:8081/addData', data).then(() => {
         getAll().then((res) => {
-            console.log(res)
+            // console.log(res)
             const tripData = res.trips[res.trips.length - 1];
-            let cardHTML;
 
             // Update UI
-            const card =
+            let cardHTML =
                 `<div class="card">
                 <img class="trip-image" src=${tripData.url}>
                 <div class="trip-info">
                     <div class="city-desc">Your Trip to: ${tripData.city}</div>
                     <div class="date-desc">Departing: ${tripData.start}</div>
-                    <div class="date-desc">Duration: ${tripData.duration.substring(0, tripData.duration.length - 9)}</div>
-                </div>
-            </div>`;
+                    <div class="date-desc">Duration: ${tripData.duration}</div>`;
 
-            document.getElementById("cards").insertAdjacentHTML('beforeend', card)
+            if (data.isTripSoon) {
+                cardHTML += `
+                    <div class="weather-desc">Current Weather: ${tripData.weather}</div>
+                    <div class="weather-temp">Current Temp: ${tripData.temp}F</div>
+                    <div class="weather-feel">Feels Like: ${tripData.app_temp}F</div>
+
+                </div>
+                </div>`;
+            } else {
+                cardHTML += `
+                    <div class="weather-high">Usual High: ${tripData.max_temp}F</div>
+                    <div class="weather-low">Usual Low: ${tripData.min_temp}F</div>
+                    </div>
+                </div>` ;
+            }
+
+
+            document.getElementById("cards").insertAdjacentHTML('beforeend', cardHTML)
         })
     });
 }
@@ -105,7 +114,7 @@ async function submitCityQuery() {
                 picUrl = picRes.hits[0].webformatURL;
             }
 
-            console.log(`Picture URL: ${picUrl}`);
+            // console.log(`Picture URL: ${picUrl}`);
             data.url = picUrl;
 
             // Process weather result
@@ -113,16 +122,16 @@ async function submitCityQuery() {
 
             data.isTripSoon = weatherRes.isCurrent;
             if (weatherRes.isCurrent) {
-                console.log(`Current Weather: ${weatherInfo.weather.description}`)
+                /* console.log(`Current Weather: ${weatherInfo.weather.description}`)
                 console.log(`Current Temp: ${weatherInfo.temp}F`)
-                console.log(`Feels Like: ${weatherInfo.app_temp}F`)
+                console.log(`Feels Like: ${weatherInfo.app_temp}F`) */
 
                 data.weather = weatherInfo.weather.description;
                 data.temp = weatherInfo.temp;
                 data.app_temp = weatherInfo.app_temp;
             } else {
-                console.log(`High: ${weatherInfo.max_temp}F`)
-                console.log(`Low: ${weatherInfo.min_temp}F`)
+                /* console.log(`High: ${weatherInfo.max_temp}F`)
+                console.log(`Low: ${weatherInfo.min_temp}F`) */
 
                 data.max_temp = weatherInfo.max_temp;
                 data.min_temp = weatherInfo.min_temp;
@@ -130,7 +139,7 @@ async function submitCityQuery() {
 
 
             // Update projectData (w/ '/addData' endpoint) & UI
-            console.log(data);
+            // console.log(data);
             updateApp(data);
         });
 

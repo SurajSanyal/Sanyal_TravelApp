@@ -18,18 +18,76 @@ body{
     font-family: -apple-system, BlinkMacSystemFont, serif;
 }
 
+@media (max-width:500px) {
+    #app {
+        font-size: 4vw;
+    }
+
+    .headline {
+        font-size: 6vw;
+    }
+
+    label {
+        font-size: 5vw;
+    }
+
+    input { 
+        font-size: 3.5vw;
+    }
+
+    button {
+        font-size: 4vw;
+        width: 40vw;
+        height: 10vw;
+    }
+}
+
+@media (max-width:1000px) {
+    #app {
+        font-size: 3vw;
+    }
+
+    .headline {
+        font-size: 5vw;
+    }
+
+    label {
+        font-size: 4vw;
+    }
+
+    input { 
+        font-size: 2.5vw;
+    }
+
+    button {
+        font-size: 3vw;
+        width: 40vw;
+        height: 10vw;
+    }
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 75%;
+    max-width: calc(100% - 20px);
+    margin: 0 auto;
+    padding: 0 10px;
+}
+
 #app {
     display: grid;
     justify-items: center;
     grid-gap: 1em;
-    font-size: 20px;
+    font-size: 2vw;
     font-family: 'Source Serif Pro', serif;
 }
 
 .headline {
     align-items: center;
     justify-content: center;
-    font-size: xx-large;
+    font-size: 4vw;
     font-weight: bold;
 }
 
@@ -37,29 +95,34 @@ body{
 label{
     display:block;
     text-align: center;
-    font-size: 27px;
+    font-size: 2vw;
+    margin-bottom: 5px;
 }
 
 input{
     display:block;
-    height: 60px;
-    width: 320px;
+    height: 5vw;
+    width: 30vw;
     background: $primary-lighter;
     color: $accent-dark;
-    font-size: 20px;
+    font-size: 1.5vw;
+    padding-left: 10px;
+    padding-right: 10px;
     font-family: 'Source Sans Pro', sans-serif;
     border: none;
+    margin-bottom: 10px;
 }
 
 button{
-    width: 400px;
-    height: 100px;
+    width: 30vw;
+    height: 5vw;
     background: $primary-dark;
     color: $primary-lighter;
-    font-size: 26px;
+    font-size: 2vw;
     font-family: 'Source Sans Pro', sans-serif;
     border: none;
     box-shadow: 2px 4px 5px #444;
+    margin-top: 20px;
     margin-bottom: 20px;
 }
 
@@ -71,30 +134,35 @@ button:disabled {
     background: gray;
 }
 
-h1{
-    font-size: 36px;
-}
-
 // Card CSS from https://getflywheel.com/layout/card-layout-css-grid-layout-how-to/
 #cards {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     grid-auto-rows: auto;
-    grid-gap: 1rem;
+    grid-row-gap: 1rem;
+    grid-column-gap: 1rem;
 }
 
 .card {
+    display: flex;
     background-color: $primary-lighter;
     border: 2px solid $primary-dark;
     border-radius: 20px;
     padding: .5rem;
+    font-size: min(1.4vw, 25px);
 }
 
 .trip-image {
     border: 1px solid $primary-light;
     border-radius: 10%;
     padding: 3px;
+    margin: 5px;
     width: 150px;
+}
+
+.trip-info {
+    align-self: center;
+    flex-grow: 1;
 }
 
 /* Reset style for HTML element on active to have no border*/
